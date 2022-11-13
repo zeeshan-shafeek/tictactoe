@@ -1,14 +1,16 @@
 from utils import TicTacToe
 
-game = TicTacToe()
+
+rows = 5
+game = TicTacToe(rows, rows)
 
 while 1:
     turn_result = ''
 
-# X's turn
-    while turn_result == 'occupied' or turn_result == '':
+    # X's turn
+    while turn_result == '':
         try:
-            turn_result = game.x_turn(input("X's turn, Enter location (1 - 9): "))
+            turn_result = game.x_turn(input(f"X's turn, Enter location (1 - {rows*rows}): "))
         except ValueError:
             print('Invalid Location!')
         except IndexError:
@@ -23,13 +25,14 @@ while 1:
             quit()
         elif turn_result == 'occupied':
             print("location already occupied!")
+            turn_result = ''
 
     turn_result = ''
 
-# O's Turn
-    while turn_result == 'occupied' or turn_result == '':
+    # O's Turn
+    while turn_result == '':
         try:
-            turn_result = game.o_turn(input("O's turn, Enter location(1 - 9): "))
+            turn_result = game.o_turn(input(f"O's turn, Enter location(1 - {rows*rows}): "))
         except ValueError:
             print("Invalid Location!")
         except IndexError:
@@ -40,3 +43,5 @@ while 1:
             quit()
         elif turn_result == 'occupied':
             print("location already occupied!")
+            turn_result = ''
+

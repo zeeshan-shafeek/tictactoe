@@ -2,59 +2,131 @@ import os
 
 
 class TicTacToe:
-    def __init__(self):
-        self.matrix = ['1', '2', '3',
-                       '4', '5', '6',
-                       '7', '8', '9']
+    def __init__(self, rows, columns):
 
+        self.rows = rows
+        self.columns = columns
+        self.matrix = []
+        for cell in range(rows * columns):
+            self.matrix.append(cell + 1)
+        # self.matrix = ['1', '2', '3',
+        #                '4', '5', '6',
+        #                '7', '8', '9']
+        cell = 0
         self.matrix_print()
 
         # clearing the matrix
-        self.matrix = [' ', ' ', ' ',
-                       ' ', ' ', ' ',
-                       ' ', ' ', ' ']
+        for cell in range(rows * columns):
+            self.matrix[cell] = ' '
+
+        # self.matrix = [' ', ' ', ' ',
+        #                ' ', ' ', ' ',
+        #                ' ', ' ', ' ']
 
     def matrix_print(self):
         os.system("cls")  # to clear the console after every turn
         print('')
-        print(f' {self.matrix[0]} | {self.matrix[1]} | {self.matrix[2]} ')
-        print('---|---|---')
-        print(f' {self.matrix[3]} | {self.matrix[4]} | {self.matrix[5]} ')
-        print('---|---|---')
-        print(f' {self.matrix[6]} | {self.matrix[7]} | {self.matrix[8]} ')
 
-    def line_find(self, coordinate1, coordinate2, coordinate3):
-        if self.matrix[coordinate1 - 1] == self.matrix[coordinate2 - 1] == self.matrix[coordinate3 - 1]:
-            # making sure that we don't mistake empty spaces with a line
-            if self.matrix[coordinate1 - 1] != ' ':
-                if self.matrix[coordinate2 - 1] != ' ':
-                    if self.matrix[coordinate3 - 1] != ' ':
-                        return 1
+        for row in range(self.rows):
 
-        return 0
+            print(end=' ')
+            for column in range(self.columns):
+                print(f'{self.matrix[column + row * self.columns]}', end='')
+                if column != self.columns - 1:
+                    print(end=' | ')
+            print()
+            if row != self.rows - 1:
+                for i in range(self.columns):
+                    print(end='---')
+                    if i != self.columns - 1:
+                        print(end='|')
+                print()
+
+        # print(f' {self.matrix[0]} | {self.matrix[1]} | {self.matrix[2]} ')
+        # print('---|---|---')
+        # print(f' {self.matrix[3]} | {self.matrix[4]} | {self.matrix[5]} ')
+        # print('---|---|---')
+        # print(f' {self.matrix[6]} | {self.matrix[7]} | {self.matrix[8]} ')
 
     def win_calc(self):
-        if self.line_find(1, 2, 3):  # every possible line in TicTacToe
-            return 'win'
-        elif self.line_find(4, 5, 6):
-            return 'win'
-        elif self.line_find(7, 8, 9):
-            return 'win'
-        elif self.line_find(1, 4, 7):
-            return 'win'
-        elif self.line_find(2, 5, 8):
-            return 'win'
-        elif self.line_find(3, 6, 9):
-            return 'win'
-        elif self.line_find(1, 5, 9):
-            return 'win'
-        elif self.line_find(3, 5, 7):
-            return 'win'
-        else:
-            for cell in range(9):  # checking if there are still empty spaces left
-                if self.matrix[cell] == ' ':
-                    return 'next turn'
+
+        draw = 1
+        for cell in range(self.rows * self.columns):  # checking if there are still empty spaces left
+            if self.matrix[cell] == ' ':
+                draw = 0
+                break
+        if draw == 1:
             return 'draw'
+
+        # checking rows
+        for row in range(self.rows):
+            win = 0
+            for column in range(self.columns):
+                if self.matrix[row * self.columns] == self.matrix[column + row * self.columns] != ' ':
+                    win = 1
+                else:
+                    win = 0
+                    break
+            if win == 1:
+                return 'win'
+
+        row, column, win = 0, 0, 0
+
+        # checking Columns
+        for column in range(self.columns):
+            win = 0
+            for row in range(self.rows):
+                if self.matrix[column] == self.matrix[column + row * self.columns] != ' ':
+                    win = 1
+                else:
+                    win = 0
+                    break
+            if win == 1:
+                return 'win'
+        i, win = 0, 0
+        # Checking Diagonally
+        for i in range(self.rows - 1):
+            if self.matrix[0] == self.matrix[(i + 1) * (self.rows + 1)] != ' ':
+                win = 1
+            else:
+                win = 0
+                break
+        if win:
+            return 'win'
+
+        i, win = 0, 0
+
+        for i in range(self.rows-1):
+            if self.matrix[self.rows - 1] == self.matrix[(i+2) * (self.rows - 1)] != ' ':
+                win = 1
+            else:
+                win = 0
+                break
+        if win:
+            return 'win'
+        return 'next turn'
+
+        # if self.line_find(1, 2, 3):  # every possible line in TicTacToe
+        #     return 'win'
+        # elif self.line_find(4, 5, 6):
+        #     return 'win'
+        # elif self.line_find(7, 8, 9):
+        #     return 'win'
+        # elif self.line_find(1, 4, 7):
+        #     return 'win'
+        # elif self.line_find(2, 5, 8):
+        #     return 'win'
+        # elif self.line_find(3, 6, 9):
+        #     return 'win'
+        # elif self.line_find(1, 5, 9):
+        #     return 'win'
+        # elif self.line_find(3, 5, 7):
+        #     return 'win'
+        # else:
+        #     for cell in range(9):  # checking if there are still empty spaces left
+        #         if self.matrix[cell] == ' ':
+        #             return 'next turn'
+        #     return 'draw'
 
     def end_turn(self):
 
